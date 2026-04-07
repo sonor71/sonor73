@@ -442,254 +442,260 @@ export default function MatchScreen() {
       <div className="matchStageWrap">
         <div className="matchStage">
           <div className="matchLayout">
-            <section className="matchDiscardPanel">
-              <div className="matchSectionTitle">Сброс</div>
+            <aside className="matchColumn matchColumnLeft">
+              <section className="matchDiscardPanel">
+                <div className="matchSectionTitle">Сброс</div>
 
-              <DiscardPile
-                playerCount={state.player.graveyard.length}
-                aiCount={state.ai.graveyard.length}
-                onClick={() => setModalView("graveyard")}
-              />
+                <DiscardPile
+                  playerCount={state.player.graveyard.length}
+                  aiCount={state.ai.graveyard.length}
+                  onClick={() => setModalView("graveyard")}
+                />
 
-              <div className="matchDiscardLegend">
-                <span>Открой сброс, чтобы посмотреть карты или сыграть их, если эффект хода это разрешает.</span>
-              </div>
+                <div className="matchDiscardLegend">
+                  <span>Открой сброс, чтобы посмотреть карты или сыграть их, если эффект хода это разрешает.</span>
+                </div>
 
-              <div className="matchRailButtons">
-                <button type="button" className="matchSmallButton" onClick={() => setModalView("log")}>
-                  Лог матча
-                </button>
-                <button type="button" className="matchSmallButton" onClick={() => navigate("/play")}>
-                  Назад
-                </button>
-              </div>
-            </section>
+                <div className="matchRailButtons">
+                  <button type="button" className="matchSmallButton" onClick={() => setModalView("log")}>
+                    Лог матча
+                  </button>
+                  <button type="button" className="matchSmallButton" onClick={() => navigate("/play")}>
+                    Назад
+                  </button>
+                </div>
+              </section>
 
-            <section className="matchEnemyHandPanel">
-              <EnemyHandRow count={state.ai.hand.length} />
-            </section>
-
-            <aside className="matchHeroPanel matchHeroPanelEnemy">
-              <HeroCluster
-                title="персонаж противника"
-                hp={state.ai.hp}
-                will={state.ai.will}
-                deck={state.ai.deck.length}
-                graveyard={state.ai.graveyard.length}
-                hand={state.ai.hand.length}
-                shieldTurnsLeft={state.ai.shield?.turnsLeft ?? null}
-                active={state.activePlayer === "ai" && state.phase !== "finished"}
-                targetable={boardAttackMode}
-                onClick={
-                  boardAttackMode
-                    ? () => {
-                        actions.attack(selectedAttacker!.instanceId, { kind: "hero" });
-                        setSelectedAttackerId(null);
-                      }
-                    : undefined
-                }
-              />
+              <aside className="matchHeroPanel matchHeroPanelPlayer">
+                <HeroCluster
+                  title="наш персонаж"
+                  hp={state.player.hp}
+                  will={state.player.will}
+                  deck={state.player.deck.length}
+                  graveyard={state.player.graveyard.length}
+                  hand={state.player.hand.length}
+                  shieldTurnsLeft={state.player.shield?.turnsLeft ?? null}
+                  active={state.activePlayer === "player" && state.phase !== "finished"}
+                />
+              </aside>
             </aside>
 
-            <section className="matchBoardPanel">
-              <div className="matchBoardTopLine">
-                <div className="matchBoardTitle">{getTurnCaption(state.phase, state.activePlayer)}</div>
-                <div className="matchBoardSubtitle">Поле боя</div>
-              </div>
+            <main className="matchColumn matchColumnCenter">
+              <section className="matchEnemyHandPanel">
+                <EnemyHandRow count={state.ai.hand.length} />
+              </section>
 
-              <div className="matchBoardGrid">
-                {Array.from({ length: MATCH_BOARD_SIZE }).map((_, index) => {
-                  const unit = state.ai.board[index] ?? null;
-                  return (
-                    <BoardSlot
-                      key={`enemy-slot-${index}`}
-                      owner="ai"
-                      unit={unit}
-                      attackTarget={boardAttackMode && Boolean(unit)}
-                      onClick={
-                        boardAttackMode && unit
-                          ? () => {
-                              actions.attack(selectedAttacker!.instanceId, {
-                                kind: "unit",
-                                unitId: unit.instanceId,
-                              });
-                              setSelectedAttackerId(null);
-                            }
-                          : undefined
-                      }
-                    />
-                  );
-                })}
+              <section className="matchBoardPanel">
+                <div className="matchBoardTopLine">
+                  <div className="matchBoardTitle">{getTurnCaption(state.phase, state.activePlayer)}</div>
+                  <div className="matchBoardSubtitle">Поле боя</div>
+                </div>
 
-                {Array.from({ length: MATCH_BOARD_SIZE }).map((_, index) => {
-                  const unit = state.player.board[index] ?? null;
-                  const canPlaceHere = (Boolean(pendingPlay) || pendingOraclePlacement) && unit === null && isPlayerTurn;
-
-                  return (
-                    <BoardSlot
-                      key={`player-slot-${index}`}
-                      owner="player"
-                      unit={unit}
-                      selected={selectedAttackerId === unit?.instanceId}
-                      emptySelectable={canPlaceHere}
-                      onClick={
-                        canPlaceHere
-                          ? () => placePendingCard(index)
-                          : isPlayerTurn && unit && !unit.exhausted && !pendingPlay && !pendingOraclePlacement
+                <div className="matchBoardGrid">
+                  {Array.from({ length: MATCH_BOARD_SIZE }).map((_, index) => {
+                    const unit = state.ai.board[index] ?? null;
+                    return (
+                      <BoardSlot
+                        key={`enemy-slot-${index}`}
+                        owner="ai"
+                        unit={unit}
+                        attackTarget={boardAttackMode && Boolean(unit)}
+                        onClick={
+                          boardAttackMode && unit
                             ? () => {
-                                setSelectedAttackerId((current) => (current === unit.instanceId ? null : unit.instanceId));
+                                actions.attack(selectedAttacker!.instanceId, {
+                                  kind: "unit",
+                                  unitId: unit.instanceId,
+                                });
+                                setSelectedAttackerId(null);
                               }
                             : undefined
-                      }
-                    />
-                  );
-                })}
-              </div>
-            </section>
+                        }
+                      />
+                    );
+                  })}
 
-            <section className="matchDiceShell">
-              <DiceRelic
-                value={diceValue}
-                rolling={diceSpinning}
-                owner={diceRollingOwner}
-                roll={state.turn.roll}
-                interactive={isPlayerRollStep}
-                pulse={rollPromptPulse}
-                onClick={() => actions.rollDice()}
-              />
-            </section>
+                  {Array.from({ length: MATCH_BOARD_SIZE }).map((_, index) => {
+                    const unit = state.player.board[index] ?? null;
+                    const canPlaceHere = (Boolean(pendingPlay) || pendingOraclePlacement) && unit === null && isPlayerTurn;
 
-            <aside className="matchHeroPanel matchHeroPanelPlayer">
-              <HeroCluster
-                title="наш персонаж"
-                hp={state.player.hp}
-                will={state.player.will}
-                deck={state.player.deck.length}
-                graveyard={state.player.graveyard.length}
-                hand={state.player.hand.length}
-                shieldTurnsLeft={state.player.shield?.turnsLeft ?? null}
-                active={state.activePlayer === "player" && state.phase !== "finished"}
-              />
+                    return (
+                      <BoardSlot
+                        key={`player-slot-${index}`}
+                        owner="player"
+                        unit={unit}
+                        selected={selectedAttackerId === unit?.instanceId}
+                        emptySelectable={canPlaceHere}
+                        onClick={
+                          canPlaceHere
+                            ? () => placePendingCard(index)
+                            : isPlayerTurn && unit && !unit.exhausted && !pendingPlay && !pendingOraclePlacement
+                              ? () => {
+                                  setSelectedAttackerId((current) => (current === unit.instanceId ? null : unit.instanceId));
+                                }
+                              : undefined
+                        }
+                      />
+                    );
+                  })}
+                </div>
+              </section>
+
+              <section className="matchControlBar">
+                <div className="matchControlInfo">
+                  <div className="matchControlCapsule">
+                    <span>Кол-во воли</span>
+                    <strong>{state.player.will}/5</strong>
+                  </div>
+                  <div className="matchControlCapsule">
+                    <span>Ход №</span>
+                    <strong>{state.round}</strong>
+                  </div>
+                  <div className="matchControlCapsule">
+                    <span>Сыграно</span>
+                    <strong>{state.turn.playLimit === null ? `${state.turn.playsMade} / ∞` : `${state.turn.playsMade} / ${state.turn.playLimit}`}</strong>
+                  </div>
+                </div>
+
+                <div className="matchControlActions">
+                  <button
+                    type="button"
+                    className={`matchActionButton ${pendingPlay?.source === "enemy_deck" ? "isQueued" : ""}`}
+                    title="Сыграть случайную карту из колоды противника"
+                    disabled={!blindEnemyCard || !canQueueCard(blindEnemyCard, "enemy_deck")}
+                    onClick={() => {
+                      if (!blindEnemyCard) return;
+                      queuePending("enemy_deck", blindEnemyCard, false);
+                    }}
+                  >
+                    Слепая карта врага
+                  </button>
+
+                  <button
+                    type="button"
+                    className="matchActionButton"
+                    title="Использовать пробуждение пассивной способности"
+                    disabled={!isPlayerTurn || !state.turn.awakeningPassiveAvailable}
+                    onClick={() => {
+                      setPendingPlay(null);
+                      setSelectedAttackerId(null);
+                      actions.useAwakeningPassive();
+                    }}
+                  >
+                    Пробудить пассивку
+                  </button>
+
+                  <button
+                    type="button"
+                    className="matchActionButton"
+                    title="Сбросить выбор карты или атакующего юнита"
+                    disabled={!pendingPlay && !selectedAttackerId && !pendingOraclePlacement}
+                    onClick={() => {
+                      setPendingPlay(null);
+                      setSelectedAttackerId(null);
+                    }}
+                  >
+                    Снять выбор
+                  </button>
+
+                  <button
+                    type="button"
+                    className="matchActionButton isPrimary"
+                    disabled={!isPlayerTurn}
+                    onClick={() => {
+                      setPendingPlay(null);
+                      setSelectedAttackerId(null);
+                      actions.endTurn();
+                    }}
+                  >
+                    Завершить ход
+                  </button>
+                </div>
+              </section>
+
+              <section className="matchPlayerHandPanel">
+                <div className="matchPlayerHandRow">
+                  {playerHandCards.map((card, index) =>
+                    card ? (
+                      <HandCard
+                        key={card.instanceId}
+                        card={card}
+                        displayCost={getDisplayedCost(card, freeAwakeningActive)}
+                        disabled={!canQueueCard(card, "hand", freeAwakeningActive)}
+                        highlight={canQueueCard(card, "hand", freeAwakeningActive)}
+                        selected={pendingPlay?.card.instanceId === card.instanceId && pendingPlay.source === "hand"}
+                        onClick={() => queuePending("hand", card, freeAwakeningActive)}
+                      />
+                    ) : (
+                      <EmptyHandSlot key={`empty-hand-${index}`} />
+                    ),
+                  )}
+                </div>
+              </section>
+            </main>
+
+            <aside className="matchColumn matchColumnRight">
+              <aside className="matchHeroPanel matchHeroPanelEnemy">
+                <HeroCluster
+                  title="персонаж противника"
+                  hp={state.ai.hp}
+                  will={state.ai.will}
+                  deck={state.ai.deck.length}
+                  graveyard={state.ai.graveyard.length}
+                  hand={state.ai.hand.length}
+                  shieldTurnsLeft={state.ai.shield?.turnsLeft ?? null}
+                  active={state.activePlayer === "ai" && state.phase !== "finished"}
+                  targetable={boardAttackMode}
+                  onClick={
+                    boardAttackMode
+                      ? () => {
+                          actions.attack(selectedAttacker!.instanceId, { kind: "hero" });
+                          setSelectedAttackerId(null);
+                        }
+                      : undefined
+                  }
+                />
+              </aside>
+
+              <section className="matchDiceShell">
+                <DiceRelic
+                  value={diceValue}
+                  rolling={diceSpinning}
+                  owner={diceRollingOwner}
+                  roll={state.turn.roll}
+                  interactive={isPlayerRollStep}
+                  pulse={rollPromptPulse}
+                  onClick={() => actions.rollDice()}
+                />
+              </section>
+
+              <section className="matchInfoPanel">
+                <div className="matchSectionTitle">Информация</div>
+
+                <div className="matchInfoTimeGrid">
+                  <div className="matchInfoTimeBox">
+                    <span>Ход</span>
+                    <strong>{formatTime(state.timer.turnSecondsLeft)}</strong>
+                  </div>
+                  <div className="matchInfoTimeBox">
+                    <span>Матч</span>
+                    <strong>{formatTime(state.timer.totalSecondsLeft)}</strong>
+                  </div>
+                </div>
+
+                <div className="matchInfoBlock">
+                  <div className="matchInfoBlockTitle">Эффект числа</div>
+                  <p>{getRollText(state.turn.roll)}</p>
+                </div>
+
+                <div className="matchInfoMeta">
+                  <span>Множитель воли: x{state.turn.willMultiplier}</span>
+                  <span>{freeAwakeningActive ? "Пробуждение активно" : "Пробуждение не активно"}</span>
+                  <span>{boardAttackMode ? "Выбран атакующий юнит" : "Атака не выбрана"}</span>
+                  <span>{state.timer.speedMultiplier > 1 ? `Ускорение хода x${state.timer.speedMultiplier}` : "Стандартная скорость хода"}</span>
+                </div>
+              </section>
             </aside>
-
-            <section className="matchControlBar">
-              <div className="matchControlCapsules">
-                <div className="matchControlCapsule">
-                  <span>Кол-во воли</span>
-                  <strong>{state.player.will}/5</strong>
-                </div>
-                <div className="matchControlCapsule">
-                  <span>Ход №</span>
-                  <strong>{state.round}</strong>
-                </div>
-                <div className="matchControlCapsule">
-                  <span>Сыграно</span>
-                  <strong>{state.turn.playLimit === null ? `${state.turn.playsMade} / ∞` : `${state.turn.playsMade} / ${state.turn.playLimit}`}</strong>
-                </div>
-              </div>
-
-              <div className="matchControlActions">
-                <button
-                  type="button"
-                  className={`matchActionButton ${pendingPlay?.source === "enemy_deck" ? "isQueued" : ""}`}
-                  title="Сыграть случайную карту из колоды противника"
-                  disabled={!blindEnemyCard || !canQueueCard(blindEnemyCard, "enemy_deck")}
-                  onClick={() => {
-                    if (!blindEnemyCard) return;
-                    queuePending("enemy_deck", blindEnemyCard, false);
-                  }}
-                >
-                  Карта врага
-                </button>
-
-                <button
-                  type="button"
-                  className="matchActionButton"
-                  title="Использовать пробуждение пассивной способности"
-                  disabled={!isPlayerTurn || !state.turn.awakeningPassiveAvailable}
-                  onClick={() => {
-                    setPendingPlay(null);
-                    setSelectedAttackerId(null);
-                    actions.useAwakeningPassive();
-                  }}
-                >
-                  Пассивка
-                </button>
-
-                <button
-                  type="button"
-                  className="matchActionButton"
-                  title="Сбросить выбор карты или атакующего юнита"
-                  disabled={!pendingPlay && !selectedAttackerId && !pendingOraclePlacement}
-                  onClick={() => {
-                    setPendingPlay(null);
-                    setSelectedAttackerId(null);
-                  }}
-                >
-                  Снять выбор
-                </button>
-
-                <button
-                  type="button"
-                  className="matchActionButton isPrimary"
-                  disabled={!isPlayerTurn}
-                  onClick={() => {
-                    setPendingPlay(null);
-                    setSelectedAttackerId(null);
-                    actions.endTurn();
-                  }}
-                >
-                  Завершить ход
-                </button>
-              </div>
-            </section>
-
-            <section className="matchPlayerHandPanel">
-              <div className="matchPlayerHandRow">
-                {playerHandCards.map((card, index) =>
-                  card ? (
-                    <HandCard
-                      key={card.instanceId}
-                      card={card}
-                      displayCost={getDisplayedCost(card, freeAwakeningActive)}
-                      disabled={!canQueueCard(card, "hand", freeAwakeningActive)}
-                      highlight={canQueueCard(card, "hand", freeAwakeningActive)}
-                      selected={pendingPlay?.card.instanceId === card.instanceId && pendingPlay.source === "hand"}
-                      onClick={() => queuePending("hand", card, freeAwakeningActive)}
-                    />
-                  ) : (
-                    <EmptyHandSlot key={`empty-hand-${index}`} />
-                  ),
-                )}
-              </div>
-            </section>
-
-            <section className="matchInfoPanel">
-              <div className="matchSectionTitle">Информация</div>
-
-              <div className="matchInfoTimeGrid">
-                <div className="matchInfoTimeBox">
-                  <span>Ход</span>
-                  <strong>{formatTime(state.timer.turnSecondsLeft)}</strong>
-                </div>
-                <div className="matchInfoTimeBox">
-                  <span>Матч</span>
-                  <strong>{formatTime(state.timer.totalSecondsLeft)}</strong>
-                </div>
-              </div>
-
-              <div className="matchInfoBlock">
-                <div className="matchInfoBlockTitle">Эффект числа</div>
-                <p>{getRollText(state.turn.roll)}</p>
-              </div>
-
-              <div className="matchInfoMeta">
-                <span>Множитель воли: x{state.turn.willMultiplier}</span>
-                <span>{freeAwakeningActive ? "Пробуждение активно" : "Пробуждение не активно"}</span>
-                <span>{boardAttackMode ? "Выбран атакующий юнит" : "Атака не выбрана"}</span>
-                <span>{state.timer.speedMultiplier > 1 ? `Ускорение хода x${state.timer.speedMultiplier}` : "Стандартная скорость хода"}</span>
-              </div>
-            </section>
           </div>
         </div>
       </div>

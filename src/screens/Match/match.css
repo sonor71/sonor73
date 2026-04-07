@@ -1,18 +1,20 @@
 :root {
   --match-bg-0: #03070f;
   --match-bg-1: #07131f;
-  --match-panel: rgba(7, 16, 28, 0.92);
-  --match-panel-soft: rgba(10, 22, 36, 0.88);
+  --match-panel: rgba(7, 16, 28, 0.94);
+  --match-panel-soft: rgba(10, 22, 36, 0.9);
   --match-line: rgba(119, 164, 212, 0.2);
   --match-text: #eef6ff;
-  --match-muted: rgba(205, 219, 235, 0.72);
+  --match-muted: rgba(205, 219, 235, 0.76);
   --match-gold: #f3bf82;
-  --match-gold-strong: #cf7a2b;
   --match-accent: #6dbbff;
   --match-danger: #ff6b6b;
   --match-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
-  --match-stage-gutter: clamp(6px, 0.6vw, 12px);
-  --match-grid-gap: clamp(7px, 0.52vw, 12px);
+  --match-stage-gutter: clamp(8px, 0.7vw, 14px);
+  --match-grid-gap: clamp(8px, 0.62vw, 13px);
+  --match-panel-radius: clamp(12px, 0.95vw, 18px);
+  --match-control-radius: 12px;
+  --match-card-radius: 14px;
 }
 
 .matchRoot {
@@ -37,13 +39,13 @@
 }
 
 .matchStage {
-  width: min(calc(100vw - (var(--match-stage-gutter) * 2)), calc((100vh - (var(--match-stage-gutter) * 2)) * 1.8333333333));
-  height: min(calc(100vh - (var(--match-stage-gutter) * 2)), calc((100vw - (var(--match-stage-gutter) * 2)) / 1.8333333333));
+  width: min(calc(100vw - (var(--match-stage-gutter) * 2)), calc((100vh - (var(--match-stage-gutter) * 2)) * 1.7777));
+  height: min(calc(100vh - (var(--match-stage-gutter) * 2)), calc((100vw - (var(--match-stage-gutter) * 2)) / 1.7777));
   max-width: 1980px;
   max-height: 1080px;
-  aspect-ratio: 1980 / 1080;
-  padding: clamp(8px, 0.75vw, 14px);
-  border-radius: 28px;
+  aspect-ratio: 16 / 9;
+  padding: clamp(9px, 0.75vw, 14px);
+  border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), var(--match-shadow);
   backdrop-filter: blur(10px);
@@ -56,16 +58,33 @@
 .matchLayout {
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: grid;
-  grid-template-columns: minmax(255px, 25%) minmax(0, 1fr) minmax(250px, 23%);
-  grid-template-rows: clamp(70px, 8.2vh, 94px) minmax(0, 1fr) clamp(64px, 7.2vh, 82px) clamp(72px, 8.1vh, 90px) clamp(112px, 13.4vh, 148px);
-  grid-template-areas:
-    "discard enemyHand enemyHero"
-    "discard board enemyHero"
-    "playerHero control dice"
-    "playerHero playerHand dice"
-    "playerHero playerHand info";
+  grid-template-columns: minmax(250px, 0.95fr) minmax(620px, 2.25fr) minmax(260px, 1.05fr);
   gap: var(--match-grid-gap);
+}
+
+.matchColumn {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  gap: var(--match-grid-gap);
+}
+
+.matchColumnLeft {
+  grid-template-rows: minmax(250px, 0.95fr) minmax(0, 1.05fr);
+}
+
+.matchColumnCenter {
+  grid-template-rows:
+    minmax(86px, 0.62fr)
+    minmax(300px, 2.45fr)
+    minmax(116px, 0.95fr)
+    minmax(142px, 1.15fr);
+}
+
+.matchColumnRight {
+  grid-template-rows: minmax(240px, 1.2fr) minmax(220px, 1.05fr) minmax(0, 1fr);
 }
 
 .matchDiscardPanel,
@@ -82,10 +101,10 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  border-radius: clamp(11px, 0.92vw, 18px);
+  border-radius: var(--match-panel-radius);
   border: 1px solid var(--match-line);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.008)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.008)),
     linear-gradient(180deg, var(--match-panel), var(--match-panel-soft));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 12px 34px rgba(0, 0, 0, 0.28);
 }
@@ -102,16 +121,24 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    linear-gradient(90deg, transparent, rgba(92, 145, 206, 0.05), transparent),
-    radial-gradient(circle at 50% 0%, rgba(243, 177, 79, 0.08), transparent 32%);
+  background: linear-gradient(180deg, rgba(98, 215, 255, 0.05), transparent 28%);
+}
+
+.matchEnemyHandPanel,
+.matchPlayerHandPanel,
+.matchControlBar,
+.matchBoardPanel,
+.matchDiceShell,
+.matchInfoPanel,
+.matchHeroPanel,
+.matchDiscardPanel {
+  padding: clamp(10px, 0.75vw, 14px);
 }
 
 .matchSectionTitle {
-  font-size: clamp(13px, 0.8vw, 16px);
-  line-height: 1;
+  font-size: clamp(12px, 0.76vw, 15px);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: rgba(247, 204, 148, 0.96);
 }
@@ -123,16 +150,12 @@
 .matchBoardSlot,
 .matchHandCard,
 .matchDiscardPile {
-  transition:
-    transform 0.16s ease,
-    border-color 0.16s ease,
-    box-shadow 0.16s ease,
-    opacity 0.16s ease;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
 }
 
 .matchSmallButton,
 .matchActionButton {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   background: linear-gradient(180deg, rgba(13, 23, 35, 0.96), rgba(6, 12, 20, 0.96));
   color: var(--match-text);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -146,8 +169,8 @@
 .matchHandCard:hover:not(:disabled),
 .matchBoardSlot:hover:not(:disabled),
 .matchD20Relic.isInteractive:hover {
-  border-color: rgba(98, 215, 255, 0.28);
-  transform: translateY(-2px);
+  border-color: rgba(98, 215, 255, 0.35);
+  transform: translateY(-1px);
 }
 
 .matchSmallButton:disabled,
@@ -156,71 +179,69 @@
 .matchBoardSlot:disabled,
 .matchHandCard:disabled,
 .matchHeroPortrait:disabled {
-  opacity: 0.48;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .matchSmallButton {
-  min-height: 46px;
-  border-radius: 999px;
+  min-height: 42px;
+  border-radius: 10px;
   padding: 0 14px;
-  font-size: clamp(11px, 0.76vw, 14px);
+  font-size: clamp(11px, 0.72vw, 13px);
 }
 
 .matchDiscardPanel {
-  grid-area: discard;
-  padding: 16px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;
-  gap: 14px;
+  gap: 10px;
 }
 
 .matchDiscardPile {
   width: 100%;
   min-height: 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--match-card-radius);
+  padding: 12px;
   background: linear-gradient(180deg, rgba(6, 13, 23, 0.94), rgba(13, 24, 38, 0.92));
   color: var(--match-text);
   display: grid;
-  grid-template-rows: minmax(150px, 1fr) auto;
-  gap: 16px;
+  grid-template-columns: minmax(110px, 0.9fr) minmax(0, 1fr);
   align-items: center;
-  justify-items: center;
+  gap: 12px;
 }
 
 .matchDiscardPileVisual {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: clamp(100px, 6vw, 130px);
+  height: clamp(100px, 6vw, 130px);
+  justify-self: center;
 }
 
 .matchDiscardCard {
   position: absolute;
-  width: 72px;
-  height: 102px;
-  border-radius: 16px;
+  width: clamp(52px, 3.5vw, 66px);
+  height: clamp(74px, 4.9vw, 94px);
+  border-radius: 12px;
   background: linear-gradient(145deg, rgba(23, 37, 52, 0.98), rgba(10, 17, 26, 0.98));
   border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
   left: 50%;
   top: 50%;
 }
 
-.matchDiscardCard.back1 { transform: translate(-66px, -42px) rotate(-18deg); }
-.matchDiscardCard.back2 { transform: translate(-18px, -54px) rotate(0deg); }
-.matchDiscardCard.back3 { transform: translate(28px, -40px) rotate(20deg); }
-.matchDiscardCard.back4 { transform: translate(-16px, 10px) rotate(-38deg); }
+.matchDiscardCard.back1 { transform: translate(-59px, -33px) rotate(-18deg); }
+.matchDiscardCard.back2 { transform: translate(-16px, -43px) rotate(0deg); }
+.matchDiscardCard.back3 { transform: translate(24px, -31px) rotate(20deg); }
+.matchDiscardCard.back4 { transform: translate(-14px, 8px) rotate(-36deg); }
 
 .matchDiscardText {
   display: grid;
-  gap: 6px;
-  text-align: center;
+  gap: 4px;
+  text-align: left;
 }
 
 .matchDiscardTitle {
-  font-size: clamp(20px, 1.25vw, 28px);
+  font-size: clamp(18px, 1.1vw, 24px);
   line-height: 1.1;
   font-weight: 800;
   text-transform: uppercase;
@@ -239,47 +260,30 @@
 }
 
 .matchDiscardLegend {
-  padding: 0 4px;
-  line-height: 1.45;
-  font-size: clamp(12px, 0.75vw, 14px);
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: clamp(11px, 0.68vw, 13px);
+  line-height: 1.35;
 }
 
 .matchRailButtons {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(6px, 0.55vw, 10px);
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
 .matchEnemyHandPanel,
-.matchPlayerHandPanel,
-.matchControlBar,
-.matchBoardPanel,
-.matchDiceShell,
-.matchInfoPanel,
-.matchHeroPanel {
-  padding: clamp(8px, 0.7vw, 12px) clamp(9px, 0.8vw, 14px);
-}
-
-.matchEnemyHandPanel {
-  grid-area: enemyHand;
+.matchPlayerHandPanel {
   display: flex;
   align-items: stretch;
 }
 
 .matchEnemyHandRow,
 .matchPlayerHandRow {
-  display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: clamp(6px, 0.55vw, 10px);
   width: 100%;
   height: 100%;
-  min-width: 0;
   min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: clamp(6px, 0.5vw, 9px);
 }
 
 .matchEnemyHandCard,
@@ -287,14 +291,14 @@
 .matchHandCardEmpty {
   min-width: 0;
   min-height: 0;
-  border-radius: clamp(11px, 0.92vw, 18px);
+  border-radius: var(--match-card-radius);
 }
 
 .matchEnemyHandCard {
-  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.014);
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.02);
   overflow: hidden;
 }
 
@@ -314,152 +318,130 @@
 }
 
 .matchEnemyHandImage,
-.matchHandCardImage { border-radius: 14px; }
-.matchBoardSlotImage { border-radius: 12px; }
-
-.matchHeroPanelEnemy { grid-area: enemyHero; }
-.matchHeroPanelPlayer { grid-area: playerHero; }
+.matchHandCardImage { border-radius: 12px; }
+.matchBoardSlotImage { border-radius: 10px; }
 
 .matchHeroCluster {
   height: 100%;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
-  gap: var(--match-grid-gap);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
 }
 
 .matchHeroCluster.isActive {
   border-color: rgba(98, 215, 255, 0.36);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(98, 215, 255, 0.16), 0 0 24px rgba(98, 215, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(98, 215, 255, 0.16), 0 0 20px rgba(98, 215, 255, 0.08);
 }
 
 .matchHeroCluster.isTargetable .matchHeroPortrait {
-  border-color: rgba(255, 179, 64, 0.6);
-  box-shadow: 0 0 0 2px rgba(255, 179, 64, 0.18), 0 0 24px rgba(255, 179, 64, 0.12);
+  border-color: rgba(255, 179, 64, 0.58);
+  box-shadow: 0 0 0 1px rgba(255, 179, 64, 0.18), 0 0 20px rgba(255, 179, 64, 0.1);
 }
 
 .matchHeroFrameBars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(6px, 0.55vw, 10px);
-}
-
-.matchHeroFrameBars span {
-  height: 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(130, 165, 210, 0.2);
-  background: linear-gradient(180deg, rgba(7, 17, 30, 0.96), rgba(4, 10, 19, 0.98));
+  display: none;
 }
 
 .matchHeroClusterGrid {
   display: grid;
-  grid-template-columns: clamp(42px, 2.8vw, 54px) minmax(0, 1fr) clamp(42px, 2.8vw, 54px);
-  gap: var(--match-grid-gap);
-  align-items: stretch;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  gap: 8px;
   min-height: 0;
 }
 
 .matchUpgradeSockets {
   display: grid;
   grid-template-rows: repeat(4, minmax(0, 1fr));
-  gap: clamp(6px, 0.55vw, 10px);
+  gap: 6px;
 }
 
 .matchUpgradeSocket {
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(180deg, rgba(6, 12, 20, 0.94), rgba(15, 25, 36, 0.94));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .matchHeroPortrait {
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: clamp(16px, 1.4vw, 26px);
-  background:
-    radial-gradient(circle at 50% 35%, rgba(255, 179, 64, 0.14), transparent 42%),
-    linear-gradient(180deg, rgba(14, 24, 34, 0.96), rgba(5, 10, 17, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(14, 24, 34, 0.96), rgba(5, 10, 17, 0.96));
   color: var(--match-text);
   width: 100%;
   min-height: 0;
   overflow: hidden;
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: 12px;
 }
 
 .matchHeroPortraitGlow {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 50% 25%, rgba(243, 177, 79, 0.16), transparent 30%),
-    radial-gradient(circle at 50% 80%, rgba(109, 187, 255, 0.1), transparent 45%);
+  background: radial-gradient(circle at 50% 34%, rgba(243, 177, 79, 0.14), transparent 38%);
 }
 
 .matchHeroPortraitLabel {
   position: relative;
   z-index: 1;
-  font-size: clamp(13px, 0.86vw, 20px);
+  font-size: clamp(12px, 0.82vw, 16px);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-align: center;
-  color: rgba(255, 245, 230, 0.92);
-  line-height: 1.35;
+  color: rgba(255, 245, 230, 0.95);
   font-weight: 800;
 }
 
 .matchHeroMetaTitle {
-  font-size: clamp(14px, 0.95vw, 22px);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  display: none;
 }
 
 .matchHeroMeta {
   display: grid;
-  gap: clamp(5px, 0.42vw, 8px);
+  gap: 6px;
 }
 
 .matchHeroMetaRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(6px, 0.55vw, 10px);
+  gap: 6px;
   color: var(--match-muted);
-  font-size: clamp(12px, 0.8vw, 15px);
+  font-size: clamp(11px, 0.72vw, 13px);
 }
 
 .matchHeroMetaRow span {
-  min-height: clamp(30px, 3.4vh, 40px);
-  padding: 0 12px;
+  min-height: clamp(28px, 3.1vh, 36px);
+  padding: 0 10px;
   display: inline-flex;
   align-items: center;
-  border-radius: 12px;
+  border-radius: 9px;
   border: 1px solid rgba(118, 155, 196, 0.14);
   background: linear-gradient(180deg, rgba(8, 18, 31, 0.88), rgba(4, 10, 19, 0.96));
 }
 
 .matchBoardPanel {
-  grid-area: board;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: clamp(5px, 0.42vw, 8px);
+  gap: 8px;
 }
 
 .matchBoardTopLine {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: var(--match-grid-gap);
-  padding: 0 4px;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .matchBoardTitle {
-  color: rgba(255, 241, 219, 0.94);
-  font-size: clamp(18px, 1.2vw, 26px);
+  color: rgba(255, 241, 219, 0.96);
+  font-size: clamp(17px, 1.08vw, 23px);
   font-weight: 800;
 }
 
 .matchBoardSubtitle {
-  font-size: clamp(12px, 0.78vw, 15px);
+  font-size: clamp(11px, 0.7vw, 13px);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .matchBoardGrid {
@@ -467,15 +449,15 @@
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(5px, 0.42vw, 8px);
+  gap: clamp(6px, 0.52vw, 10px);
 }
 
 .matchBoardSlot {
   min-width: 0;
   min-height: 0;
-  border-radius: clamp(11px, 0.92vw, 18px);
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: clamp(4px, 0.35vw, 6px);
+  padding: clamp(4px, 0.32vw, 6px);
   background: linear-gradient(180deg, rgba(8, 14, 22, 0.98), rgba(12, 20, 31, 0.98));
   overflow: hidden;
   display: grid;
@@ -484,20 +466,18 @@
 }
 
 .matchBoardSlot.isEmpty {
-  background:
-    linear-gradient(180deg, rgba(8, 14, 22, 0.86), rgba(13, 23, 35, 0.88)),
-    radial-gradient(circle at center, rgba(255, 179, 64, 0.06), transparent 55%);
-  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(8, 14, 22, 0.78), rgba(13, 23, 35, 0.82));
+  border: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
 .matchBoardSlot.isEmpty.isSelectable {
   border-style: solid;
-  border-color: rgba(243, 177, 79, 0.56);
-  box-shadow: inset 0 0 0 1px rgba(243, 177, 79, 0.18), 0 0 28px rgba(243, 177, 79, 0.12);
+  border-color: rgba(243, 177, 79, 0.54);
+  box-shadow: inset 0 0 0 1px rgba(243, 177, 79, 0.16), 0 0 20px rgba(243, 177, 79, 0.1);
 }
 
 .matchEmptySlotPlus {
-  font-size: clamp(24px, 1.6vw, 34px);
+  font-size: clamp(22px, 1.3vw, 30px);
   color: rgba(255, 213, 150, 0.5);
   font-weight: 700;
 }
@@ -505,17 +485,16 @@
 .matchBoardSlot.isFilled {
   grid-template-rows: 1fr auto;
   align-content: start;
-  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchBoardSlot.isSelected {
-  border-color: rgba(98, 215, 255, 0.6);
-  box-shadow: 0 0 0 1px rgba(98, 215, 255, 0.24), 0 0 26px rgba(98, 215, 255, 0.12);
+  border-color: rgba(98, 215, 255, 0.62);
+  box-shadow: 0 0 0 1px rgba(98, 215, 255, 0.22), 0 0 22px rgba(98, 215, 255, 0.12);
 }
 
 .matchBoardSlot.isAttackTarget {
-  border-color: rgba(255, 107, 107, 0.56);
-  box-shadow: 0 0 0 1px rgba(255, 107, 107, 0.18), 0 0 26px rgba(255, 107, 107, 0.12);
+  border-color: rgba(255, 107, 107, 0.58);
+  box-shadow: 0 0 0 1px rgba(255, 107, 107, 0.18), 0 0 22px rgba(255, 107, 107, 0.12);
 }
 
 .matchBoardSlotBody {
@@ -538,7 +517,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: rgba(5, 12, 20, 0.86);
+  background: rgba(5, 12, 20, 0.9);
   border: 1px solid rgba(243, 177, 79, 0.36);
   color: rgba(248, 207, 140, 0.98);
   font-size: 11px;
@@ -549,92 +528,84 @@
   align-self: end;
   display: flex;
   justify-content: space-between;
-  gap: clamp(5px, 0.42vw, 8px);
-  font-size: clamp(10px, 0.7vw, 13px);
+  gap: 6px;
+  font-size: clamp(10px, 0.66vw, 12px);
 }
 
 .matchBoardSlotStats span {
-  min-width: clamp(38px, 2.4vw, 46px);
-  min-height: clamp(22px, 2.5vh, 26px);
+  min-width: 38px;
+  min-height: 22px;
   padding: 0 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: rgba(5, 12, 20, 0.86);
+  background: rgba(5, 12, 20, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(241, 247, 255, 0.96);
   font-weight: 800;
 }
 
 .matchControlBar {
-  grid-area: control;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  align-content: center;
-  gap: var(--match-grid-gap);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: 10px;
 }
 
-.matchControlCapsules {
-  display: flex;
-  gap: clamp(5px, 0.42vw, 8px);
-  flex-wrap: wrap;
-  min-width: 0;
-  overflow: visible;
+.matchControlInfo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .matchControlCapsule {
-  min-height: clamp(36px, 4.2vh, 50px);
-  min-width: clamp(98px, 8vw, 120px);
-  padding: 0 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(118, 154, 194, 0.18);
+  min-height: 60px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(118, 154, 194, 0.2);
   background: linear-gradient(180deg, rgba(8, 19, 32, 0.94), rgba(4, 11, 20, 0.98));
-  display: flex;
-  align-items: center;
-  gap: clamp(6px, 0.55vw, 10px);
+  display: grid;
+  align-content: center;
+  gap: 4px;
+}
+
+.matchControlCapsule span {
   color: var(--match-muted);
-  font-size: clamp(11px, 0.72vw, 13px);
+  font-size: 10px;
   text-transform: uppercase;
-  white-space: nowrap;
+  letter-spacing: 0.08em;
 }
 
 .matchControlCapsule strong {
   color: var(--match-text);
-  font-size: clamp(14px, 0.9vw, 17px);
+  font-size: clamp(14px, 0.94vw, 18px);
 }
 
 .matchControlActions {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(5px, 0.42vw, 8px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .matchActionButton {
-  min-height: clamp(34px, 4vh, 44px);
-  padding: 4px clamp(8px, 0.65vw, 12px);
-  border-radius: 12px;
-  font-size: clamp(10px, 0.64vw, 13px);
-  line-height: 1.25;
-  white-space: normal;
+  min-height: 44px;
+  padding: 4px 8px;
+  border-radius: var(--match-control-radius);
+  font-size: clamp(10px, 0.66vw, 12px);
+  line-height: 1.2;
   text-wrap: balance;
 }
 
 .matchActionButton.isPrimary {
-  border-color: rgba(243, 177, 79, 0.34);
-  background: linear-gradient(180deg, rgba(110, 53, 17, 0.96), rgba(63, 27, 9, 0.98));
+  border-color: rgba(243, 177, 79, 0.44);
+  background: linear-gradient(180deg, rgba(129, 63, 19, 0.95), rgba(80, 35, 12, 0.98));
+  box-shadow: 0 0 0 1px rgba(243, 177, 79, 0.16);
 }
 
 .matchActionButton.isQueued {
   border-color: rgba(243, 177, 79, 0.58);
-  box-shadow: 0 0 0 1px rgba(243, 177, 79, 0.18), 0 0 20px rgba(243, 177, 79, 0.1);
-}
-
-.matchPlayerHandPanel {
-  grid-area: playerHand;
-  display: flex;
-  align-items: stretch;
+  box-shadow: 0 0 0 1px rgba(243, 177, 79, 0.18), 0 0 18px rgba(243, 177, 79, 0.12);
 }
 
 .matchHandCard,
@@ -644,7 +615,7 @@
 
 .matchHandCard {
   position: relative;
-  padding: clamp(4px, 0.35vw, 6px);
+  padding: clamp(4px, 0.32vw, 6px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: linear-gradient(180deg, rgba(11, 19, 30, 0.98), rgba(6, 11, 18, 0.98));
   overflow: hidden;
@@ -660,8 +631,8 @@
 }
 
 .matchHandCardEmpty {
-  border: 1px dashed rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.012);
 }
 
 .matchHandCardMinimal .matchHandCardBody,
@@ -692,25 +663,19 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
-.matchDiceShell {
-  grid-area: dice;
-  display: grid;
-  align-items: stretch;
-}
-
 .matchDicePanel {
   height: 100%;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   justify-items: center;
   align-items: center;
-  gap: clamp(6px, 0.55vw, 10px);
+  gap: 8px;
   text-align: center;
 }
 
 .matchD20Relic {
   position: relative;
-  width: min(clamp(104px, 9.3vw, 162px), 74%);
+  width: min(clamp(136px, 9.4vw, 172px), 84%);
   aspect-ratio: 1 / 1;
   border: none;
   cursor: default;
@@ -742,60 +707,50 @@
 .matchD20Value {
   position: relative;
   z-index: 1;
-  font-size: clamp(38px, 2.5vw, 54px);
+  font-size: clamp(40px, 2.8vw, 56px);
   font-weight: 900;
   text-shadow: 0 0 16px rgba(0, 0, 0, 0.26);
 }
 
 .matchD20Label {
   position: absolute;
-  bottom: 13%;
+  bottom: 12%;
   left: 0;
   right: 0;
-  text-align: center;
-  font-size: clamp(11px, 0.8vw, 15px);
-  letter-spacing: 0.16em;
+  font-size: clamp(11px, 0.74vw, 14px);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .matchDiceTextBlock {
+  width: 100%;
   display: grid;
   gap: 6px;
 }
 
 .matchDiceTitle {
   color: rgba(255, 209, 149, 0.95);
-  font-size: clamp(12px, 0.82vw, 15px);
+  font-size: clamp(12px, 0.75vw, 14px);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .matchDiceRule {
-  font-size: clamp(12px, 0.82vw, 15px);
-  line-height: 1.4;
+  font-size: clamp(12px, 0.74vw, 14px);
+  line-height: 1.35;
 }
 
 .matchInfoPanel {
-  grid-area: info;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-    "title title"
-    "time block"
-    "meta meta";
-  gap: clamp(6px, 0.55vw, 10px);
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  gap: 8px;
 }
-
-.matchInfoPanel > .matchSectionTitle { grid-area: title; }
-.matchInfoTimeGrid { grid-area: time; }
-.matchInfoBlock { grid-area: block; }
-.matchInfoMeta { grid-area: meta; }
 
 .matchInfoTimeGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(6px, 0.55vw, 10px);
+  gap: 8px;
 }
 
 .matchInfoTimeBox,
@@ -808,9 +763,9 @@
 }
 
 .matchInfoTimeBox {
-  min-height: clamp(46px, 5.6vh, 64px);
-  padding: 10px 12px;
-  border-radius: 14px;
+  min-height: 58px;
+  padding: 8px 10px;
+  border-radius: 10px;
   display: grid;
   align-content: center;
   gap: 4px;
@@ -818,26 +773,26 @@
 
 .matchInfoTimeBox span {
   color: var(--match-muted);
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .matchInfoTimeBox strong {
   color: var(--match-text);
-  font-size: clamp(18px, 1.15vw, 26px);
+  font-size: clamp(18px, 1.08vw, 24px);
   line-height: 1;
 }
 
 .matchInfoBlock {
-  padding: 12px;
-  border-radius: 14px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .matchInfoBlockTitle {
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   color: rgba(255, 209, 149, 0.95);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -845,24 +800,24 @@
 
 .matchInfoBlock p {
   margin: 0;
-  line-height: 1.42;
-  font-size: clamp(12px, 0.78vw, 14px);
+  line-height: 1.38;
+  font-size: clamp(12px, 0.7vw, 13px);
 }
 
 .matchInfoMeta {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(5px, 0.42vw, 8px);
+  grid-template-columns: 1fr;
+  gap: 6px;
 }
 
 .matchInfoMeta span {
-  min-height: 36px;
-  padding: 0 12px;
-  border-radius: 12px;
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 9px;
   display: inline-flex;
   align-items: center;
   color: var(--match-muted);
-  font-size: clamp(11px, 0.72vw, 13px);
+  font-size: clamp(11px, 0.68vw, 12px);
 }
 
 .matchModalOverlay {
@@ -891,7 +846,7 @@
 .matchModalHeader {
   display: flex;
   justify-content: space-between;
-  gap: clamp(6px, 0.55vw, 10px);
+  gap: 10px;
   align-items: center;
 }
 
@@ -916,8 +871,8 @@
 }
 
 .matchModalInfo {
-  padding: clamp(8px, 0.75vw, 14px);
-  border-radius: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
   color: var(--match-muted);
 }
 
@@ -935,7 +890,7 @@
 
 .matchLogList {
   display: grid;
-  gap: clamp(5px, 0.42vw, 8px);
+  gap: 8px;
 }
 
 .matchLogEntry {
@@ -954,7 +909,7 @@
 .matchResultActions {
   display: flex;
   justify-content: center;
-  gap: clamp(6px, 0.55vw, 10px);
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -971,24 +926,20 @@
 
 @media (max-width: 1600px) {
   .matchLayout {
-    grid-template-columns: minmax(230px, 26%) minmax(0, 1fr) minmax(220px, 24%);
+    grid-template-columns: minmax(230px, 0.9fr) minmax(560px, 2.2fr) minmax(240px, 1fr);
+  }
+
+  .matchControlBar {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
   }
 
   .matchControlActions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .matchActionButton:last-child {
-    grid-column: 1 / -1;
-  }
-
-  .matchDiscardLegend {
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-  }
 }
 
-@media (max-width: 1360px) {
+@media (max-width: 1366px) {
   .matchStageWrap {
     place-items: start;
     overflow: auto;
@@ -996,9 +947,17 @@
   }
 
   .matchStage {
-    width: 1360px;
-    height: 760px;
-    min-width: 1360px;
-    min-height: 760px;
+    width: 1366px;
+    height: 768px;
+    min-width: 1366px;
+    min-height: 768px;
+  }
+
+  .matchLayout {
+    grid-template-columns: minmax(220px, 0.9fr) minmax(620px, 2.35fr) minmax(220px, 0.95fr);
+  }
+
+  .matchColumnCenter {
+    grid-template-rows: minmax(78px, 0.58fr) minmax(280px, 2.4fr) minmax(118px, 1fr) minmax(132px, 1.05fr);
   }
 }
