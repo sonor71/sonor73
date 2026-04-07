@@ -11,6 +11,8 @@
   --match-accent: #6dbbff;
   --match-danger: #ff6b6b;
   --match-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  --match-stage-gutter: clamp(6px, 0.6vw, 12px);
+  --match-grid-gap: clamp(7px, 0.52vw, 12px);
 }
 
 .matchRoot {
@@ -30,17 +32,17 @@
   height: 100%;
   display: grid;
   place-items: center;
-  padding: 10px;
+  padding: var(--match-stage-gutter);
   overflow: hidden;
 }
 
 .matchStage {
-  width: min(calc(100vw - 20px), calc((100vh - 20px) * 1.8333333333));
-  height: min(calc(100vh - 20px), calc((100vw - 20px) / 1.8333333333));
+  width: min(calc(100vw - (var(--match-stage-gutter) * 2)), calc((100vh - (var(--match-stage-gutter) * 2)) * 1.8333333333));
+  height: min(calc(100vh - (var(--match-stage-gutter) * 2)), calc((100vw - (var(--match-stage-gutter) * 2)) / 1.8333333333));
   max-width: 1980px;
   max-height: 1080px;
   aspect-ratio: 1980 / 1080;
-  padding: 14px;
+  padding: clamp(8px, 0.75vw, 14px);
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), var(--match-shadow);
@@ -55,15 +57,15 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 28% minmax(0, 1fr) 24%;
-  grid-template-rows: 96px minmax(0, 1fr) 86px 92px 154px;
+  grid-template-columns: minmax(255px, 25%) minmax(0, 1fr) minmax(250px, 23%);
+  grid-template-rows: clamp(70px, 8.2vh, 94px) minmax(0, 1fr) clamp(64px, 7.2vh, 82px) clamp(72px, 8.1vh, 90px) clamp(112px, 13.4vh, 148px);
   grid-template-areas:
     "discard enemyHand enemyHero"
     "discard board enemyHero"
     "playerHero control dice"
     "playerHero playerHand dice"
     "playerHero playerHand info";
-  gap: 12px;
+  gap: var(--match-grid-gap);
 }
 
 .matchDiscardPanel,
@@ -80,7 +82,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  border-radius: 18px;
+  border-radius: clamp(11px, 0.92vw, 18px);
   border: 1px solid var(--match-line);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.008)),
@@ -240,12 +242,17 @@
   padding: 0 4px;
   line-height: 1.45;
   font-size: clamp(12px, 0.75vw, 14px);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .matchRailButtons {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
 }
 
 .matchEnemyHandPanel,
@@ -255,7 +262,7 @@
 .matchDiceShell,
 .matchInfoPanel,
 .matchHeroPanel {
-  padding: 12px 14px;
+  padding: clamp(8px, 0.7vw, 12px) clamp(9px, 0.8vw, 14px);
 }
 
 .matchEnemyHandPanel {
@@ -268,7 +275,7 @@
 .matchPlayerHandRow {
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -280,7 +287,7 @@
 .matchHandCardEmpty {
   min-width: 0;
   min-height: 0;
-  border-radius: 18px;
+  border-radius: clamp(11px, 0.92vw, 18px);
 }
 
 .matchEnemyHandCard {
@@ -317,7 +324,7 @@
   height: 100%;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;
-  gap: 12px;
+  gap: var(--match-grid-gap);
 }
 
 .matchHeroCluster.isActive {
@@ -333,7 +340,7 @@
 .matchHeroFrameBars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
 }
 
 .matchHeroFrameBars span {
@@ -345,8 +352,8 @@
 
 .matchHeroClusterGrid {
   display: grid;
-  grid-template-columns: 54px minmax(0, 1fr) 54px;
-  gap: 12px;
+  grid-template-columns: clamp(42px, 2.8vw, 54px) minmax(0, 1fr) clamp(42px, 2.8vw, 54px);
+  gap: var(--match-grid-gap);
   align-items: stretch;
   min-height: 0;
 }
@@ -354,7 +361,7 @@
 .matchUpgradeSockets {
   display: grid;
   grid-template-rows: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
 }
 
 .matchUpgradeSocket {
@@ -367,7 +374,7 @@
 .matchHeroPortrait {
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 26px;
+  border-radius: clamp(16px, 1.4vw, 26px);
   background:
     radial-gradient(circle at 50% 35%, rgba(255, 179, 64, 0.14), transparent 42%),
     linear-gradient(180deg, rgba(14, 24, 34, 0.96), rgba(5, 10, 17, 0.96));
@@ -391,7 +398,7 @@
 .matchHeroPortraitLabel {
   position: relative;
   z-index: 1;
-  font-size: clamp(16px, 1vw, 22px);
+  font-size: clamp(13px, 0.86vw, 20px);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-align: center;
@@ -401,7 +408,7 @@
 }
 
 .matchHeroMetaTitle {
-  font-size: clamp(18px, 1.05vw, 24px);
+  font-size: clamp(14px, 0.95vw, 22px);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -409,19 +416,19 @@
 
 .matchHeroMeta {
   display: grid;
-  gap: 8px;
+  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchHeroMetaRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
   color: var(--match-muted);
   font-size: clamp(12px, 0.8vw, 15px);
 }
 
 .matchHeroMetaRow span {
-  min-height: 40px;
+  min-height: clamp(30px, 3.4vh, 40px);
   padding: 0 12px;
   display: inline-flex;
   align-items: center;
@@ -434,14 +441,14 @@
   grid-area: board;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: 8px;
+  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchBoardTopLine {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--match-grid-gap);
   padding: 0 4px;
 }
 
@@ -460,15 +467,15 @@
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchBoardSlot {
   min-width: 0;
   min-height: 0;
-  border-radius: 18px;
+  border-radius: clamp(11px, 0.92vw, 18px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 6px;
+  padding: clamp(4px, 0.35vw, 6px);
   background: linear-gradient(180deg, rgba(8, 14, 22, 0.98), rgba(12, 20, 31, 0.98));
   overflow: hidden;
   display: grid;
@@ -498,7 +505,7 @@
 .matchBoardSlot.isFilled {
   grid-template-rows: 1fr auto;
   align-content: start;
-  gap: 8px;
+  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchBoardSlot.isSelected {
@@ -542,13 +549,13 @@
   align-self: end;
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: clamp(5px, 0.42vw, 8px);
   font-size: clamp(10px, 0.7vw, 13px);
 }
 
 .matchBoardSlotStats span {
-  min-width: 46px;
-  min-height: 26px;
+  min-width: clamp(38px, 2.4vw, 46px);
+  min-height: clamp(22px, 2.5vh, 26px);
   padding: 0 8px;
   display: inline-flex;
   align-items: center;
@@ -563,29 +570,30 @@
 .matchControlBar {
   grid-area: control;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: var(--match-grid-gap);
 }
 
 .matchControlCapsules {
   display: flex;
-  gap: 8px;
-  flex-wrap: nowrap;
+  gap: clamp(5px, 0.42vw, 8px);
+  flex-wrap: wrap;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .matchControlCapsule {
-  min-height: 50px;
-  min-width: 120px;
+  min-height: clamp(36px, 4.2vh, 50px);
+  min-width: clamp(98px, 8vw, 120px);
   padding: 0 14px;
   border-radius: 999px;
   border: 1px solid rgba(118, 154, 194, 0.18);
   background: linear-gradient(180deg, rgba(8, 19, 32, 0.94), rgba(4, 11, 20, 0.98));
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
   color: var(--match-muted);
   font-size: clamp(11px, 0.72vw, 13px);
   text-transform: uppercase;
@@ -598,18 +606,19 @@
 }
 
 .matchControlActions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchActionButton {
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 14px;
-  font-size: clamp(11px, 0.7vw, 13px);
-  white-space: nowrap;
+  min-height: clamp(34px, 4vh, 44px);
+  padding: 4px clamp(8px, 0.65vw, 12px);
+  border-radius: 12px;
+  font-size: clamp(10px, 0.64vw, 13px);
+  line-height: 1.25;
+  white-space: normal;
+  text-wrap: balance;
 }
 
 .matchActionButton.isPrimary {
@@ -635,7 +644,7 @@
 
 .matchHandCard {
   position: relative;
-  padding: 6px;
+  padding: clamp(4px, 0.35vw, 6px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: linear-gradient(180deg, rgba(11, 19, 30, 0.98), rgba(6, 11, 18, 0.98));
   overflow: hidden;
@@ -695,13 +704,13 @@
   grid-template-rows: auto minmax(0, 1fr) auto;
   justify-items: center;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
   text-align: center;
 }
 
 .matchD20Relic {
   position: relative;
-  width: min(168px, 74%);
+  width: min(clamp(104px, 9.3vw, 162px), 74%);
   aspect-ratio: 1 / 1;
   border: none;
   cursor: default;
@@ -775,7 +784,7 @@
     "title title"
     "time block"
     "meta meta";
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
 }
 
 .matchInfoPanel > .matchSectionTitle { grid-area: title; }
@@ -786,7 +795,7 @@
 .matchInfoTimeGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
 }
 
 .matchInfoTimeBox,
@@ -799,7 +808,7 @@
 }
 
 .matchInfoTimeBox {
-  min-height: 64px;
+  min-height: clamp(46px, 5.6vh, 64px);
   padding: 10px 12px;
   border-radius: 14px;
   display: grid;
@@ -843,7 +852,7 @@
 .matchInfoMeta {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchInfoMeta span {
@@ -882,7 +891,7 @@
 .matchModalHeader {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
   align-items: center;
 }
 
@@ -907,7 +916,7 @@
 }
 
 .matchModalInfo {
-  padding: 14px;
+  padding: clamp(8px, 0.75vw, 14px);
   border-radius: 14px;
   color: var(--match-muted);
 }
@@ -926,7 +935,7 @@
 
 .matchLogList {
   display: grid;
-  gap: 8px;
+  gap: clamp(5px, 0.42vw, 8px);
 }
 
 .matchLogEntry {
@@ -938,14 +947,14 @@
 
 .matchResultCard {
   display: grid;
-  gap: 12px;
+  gap: var(--match-grid-gap);
   text-align: center;
 }
 
 .matchResultActions {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: clamp(6px, 0.55vw, 10px);
   flex-wrap: wrap;
 }
 
@@ -962,19 +971,20 @@
 
 @media (max-width: 1600px) {
   .matchLayout {
-    grid-template-columns: 29% minmax(0, 1fr) 25%;
-    grid-template-rows: 90px minmax(0, 1fr) 82px 88px 146px;
+    grid-template-columns: minmax(230px, 26%) minmax(0, 1fr) minmax(220px, 24%);
   }
 
-  .matchControlCapsule {
-    min-width: 108px;
-    padding-left: 12px;
-    padding-right: 12px;
+  .matchControlActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .matchActionButton {
-    padding-left: 12px;
-    padding-right: 12px;
+  .matchActionButton:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .matchDiscardLegend {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 }
 
@@ -982,6 +992,7 @@
   .matchStageWrap {
     place-items: start;
     overflow: auto;
+    padding: 8px;
   }
 
   .matchStage {

@@ -592,18 +592,20 @@ export default function MatchScreen() {
                 <button
                   type="button"
                   className={`matchActionButton ${pendingPlay?.source === "enemy_deck" ? "isQueued" : ""}`}
+                  title="Сыграть случайную карту из колоды противника"
                   disabled={!blindEnemyCard || !canQueueCard(blindEnemyCard, "enemy_deck")}
                   onClick={() => {
                     if (!blindEnemyCard) return;
                     queuePending("enemy_deck", blindEnemyCard, false);
                   }}
                 >
-                  Слепая карта врага
+                  Карта врага
                 </button>
 
                 <button
                   type="button"
                   className="matchActionButton"
+                  title="Использовать пробуждение пассивной способности"
                   disabled={!isPlayerTurn || !state.turn.awakeningPassiveAvailable}
                   onClick={() => {
                     setPendingPlay(null);
@@ -611,12 +613,13 @@ export default function MatchScreen() {
                     actions.useAwakeningPassive();
                   }}
                 >
-                  Пробудить пассивку
+                  Пассивка
                 </button>
 
                 <button
                   type="button"
                   className="matchActionButton"
+                  title="Сбросить выбор карты или атакующего юнита"
                   disabled={!pendingPlay && !selectedAttackerId && !pendingOraclePlacement}
                   onClick={() => {
                     setPendingPlay(null);
